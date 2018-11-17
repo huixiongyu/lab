@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>anoSlide</title>
+	<style type="text/css" media="screen">
+		*{
+			padding:0;
+			margin:0;
+			text-decoration: none;
+		}
+		#container{
+			position: absolute;
+			width: 600px;
+			height: 400px;
+			left: 50%;
+			top: 50%;
+			margin-top: -200px;
+			margin-left: -300px;
+			border: 2px solid #333;
+			overflow: hidden;
+
+		}
+		#list{
+			position: absolute;
+			width: 4200px;
+			height: 400px;
+			z-index: 1;
+		}
+		#list img{
+			float: left;
+		}
+		#buttons{
+			position: absolute;
+			height: 10px;
+			width: 100px;
+			bottom: 20px;
+			left: 265px;
+			z-index: 2;
+		}
+		#buttons span{
+			float: left;
+			width: 10px;
+			height: 10px;
+			border: 1px solid #fff;
+			border-radius: 50%;
+			background-color: #333;
+			margin-right: 5px;
+		}
+		#buttons .on{
+			background-color: orangered;
+		}
+		.arrow{
+			position: absolute;
+			z-index: 3;
+			width: 40px;
+			height: 40px;
+			top: 180px;
+			cursor: pointer;
+			display: none;
+			line-height: 39px;
+			font-size: 36px;
+			font-weight: bold;
+			text-align: center;
+			background-color: RGBA(0,0,0,.3); color: #fff;
+		}
+        .arrow:hover { background-color: RGBA(0,0,0,.7);}
+        #container:hover .arrow { display: block;}
+        #prev { left: 20px;}
+        #next { right: 20px;}
+	</style>
+</head>
+<body>
+	<div id="container">
+		<div id="list" style="left: -600px">
+			<img src="img/5.jpg" alt="5">
+			<img src="img/1.jpg" alt="1">
+			<img src="img/2.jpg" alt="2">
+			<img src="img/3.jpg" alt="3">
+			<img src="img/4.jpg" alt="4">
+			<img src="img/5.jpg" alt="5">
+			<img src="img/1.jpg" alt="1">
+		</div>
+		<div id="buttons">
+			<span index="1" class="on"></span>
+			<span index="2"></span>
+			<span index="3"></span>
+			<span index="4"></span>
+			<span index="5"></span>
+		</div>
+	    <a href="javascript:;" id="prev" class="arrow">&lt;</a>
+	    <a href="javascript:;" id="next" class="arrow">&gt;</a>
+	</div>
+	<script>
+		window.onload = function(){
+			var container = document.getElementById('container');
+			var list = document.getElementById('list');
+			var buttons = document.getElementById('buttons').getElementsByTagName('span');
+			var prev = document.getElementById('prev');
+			var next = document.getElementById('next');
+			var index = 1;
+			var animated = false;
+			var timer;
+
+			function showButton(){
+				for(var i=0;i< buttons.length; i++){
+					if(buttons[i].className =='on'){
+						buttons[i].className ='';
+						break;
+					}
+				}
+				buttons[index-1].className='on';
+			}
+
+			function animate(offset){
+				animated = true;
+				var newLeft =parseInt(list.style.left) +offset;
+				var time = 300;	//位移总时间
+				var interval = 10;	//位移间隔时间
+				var speed = offset/(time/interval); //每次位移量
+				function go(){
+					if((speed<0 && parseInt(list.style.left) > newLeft) ||(speed>0 && parseInt(list.style.left)< newLeft) ){
+						list.style.left = parseInt(list.style.left) + speed + 'px';
+						setTimeout(go, interval);
+					}else{
+						animated = false;
+						list.style.left = newLeft +'px';
+						if(newLeft > -600){
+							list.style.left = -3000+ 'px';
+						}
+						if(newLeft < -3000){
+							list.style.left = -600+'px';
+						}
+					}
+				}
+				go();
+			}
+
+			next.onclick = function(){
+				if(!animated){
+	                if (index == 5) {
+	                    index = 1;
+	                }
+	                else {
+	                    index += 1;
+	                }
+					showButton();
+					animate(-600);
+				}
+			}
+			prev.onclick = function(){
+				if(!animated){
+	                if (index == 1) {
+	                    index = 5;
+	                }
+	                else {
+	                    index -= 1;
+	                }
+					showButton();
+					animate(600);
+				}
+			}
+			for(var i=0;i<buttons.length;i++){
+				buttons[i].onclick = function(){
+					if(this.className == 'on'){
+						return;
+					}
+					var myIndex = parseInt(this.getAttribute('index'));
+					var offset = -600*(myIndex - index);
+					animate(offset);
+					index = myIndex;
+					showButton();
+				}
+			}
+
+			function play(){
+				timer = setInterval(function(){
+					next.onclick();
+				},3000);
+			}
+			function stop(){
+				clearInterval(timer);
+			}
+			container.onmouseover = stop;
+			container.onmouseout = play;
+
+			play();
+		}
+	</script>
+</body>
+</html>

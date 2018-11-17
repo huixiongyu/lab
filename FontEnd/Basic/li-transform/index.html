@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<style type="text/css">
+.menu {
+    font-family: arial, sans-serif;
+    width: 440px;
+    margin: 0;
+}
+.menu ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+.menu ul li {
+    float: left;               /* 列表横向显示*/
+    position: relative;
+}
+.menu ul li a, .menu ul li a:visited {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    width: 104px;
+    height: 30px;
+    color: #000;
+    border: 1px solid #fff;
+    border-width: 1px 1px 0 0;
+    background: #5678ee;
+    line-height: 30px;
+    font-size: 14px;
+}
+.menu ul li ul {
+    display: none;
+}
+.menu ul li:hover a {
+    color: #fff;
+}
+.menu ul li:hover ul {
+    display: block;
+    position: absolute;
+    top: 31px;
+    left: 0;
+    width: 105px;
+}
+.menu ul li:hover ul li a {
+    display: block;
+    background: #ff4321;
+    color: #000;
+}
+.menu ul li:hover ul li a:hover {
+    background: #dfc184;
+    color: #000;
+}
+</style>
+</head>
+<body>
+<div class="menu">
+    <ul>
+        <li><a href="#">文 件</a>
+            <ul>
+                <li><a href="#">打 开</a></li>
+                <li><a href="#">保 存</a></li>
+                <li><a href="#">新 建</a></li>
+            </ul>
+        </li>
+        <li><a href="#">查 看</a>
+            <ul>
+                <li><a href="#">工具栏</a></li>
+                <li><a href="#">标 尺</a></li>
+                <li><a href="#">缩 放</a></li>
+            </ul>
+        </li>
+        <li><a href="#">修 改</a>
+            <ul>
+                <li><a href="#">属 性</a></li>
+                <li><a href="#">样 式</a></li>
+            </ul>
+        </li>
+        <li><a href="#"> 窗 口</a>
+            <ul>
+                <li><a href="#">历史记录</a></li>
+                <li><a href="#">颜 色</a></li>
+                <li><a href="#">时间轴</a></li>
+            </ul>
+        </li>
+    </ul>
+    <div class="clear"> </div>
+</div>
+</body>
+</html>
