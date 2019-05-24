@@ -9,8 +9,6 @@
 * clean-webpack-plugin
 
 
-## 安装webpack
-```
-npm i webpack webpack-cli -D
 
-```
+参考：
+[基于Webpack4搭建Vue开发环境](https://juejin.im/post/5bc30d5fe51d450ea1328877)
