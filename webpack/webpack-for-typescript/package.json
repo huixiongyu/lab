@@ -1,0 +1,25 @@
+{
+  "name": "webpack-for-typescript",
+  "version": "1.0.0",
+  "description": "webpack for typescript",
+  "main": "./src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env NODE_ENV=development webpack-dev-server --config ./build/webpack.config.js",
+    "build": "cross-env NODE_ENV=production webpack --config ./build/webpack.config.js"
+  },
+  "author": "huixiong",
+  "license": "ISC",
+  "devDependencies": {
+    "clean-webpack-plugin": "^2.0.2",
+    "cross-env": "^5.2.0",
+    "html-webpack-plugin": "^3.2.0",
+    "ts-loader": "^6.0.1",
+    "webpack": "^4.32.2",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.4.1"
+  },
+  "dependencies": {
+    "typescript": "^3.4.5"
+  }
+}
