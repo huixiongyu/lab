@@ -1,5 +1,5 @@
 const Router = require('koa-router')
-const qiniuRouter = new Router({ prefix: '/qiniu' })
+const qiniuRouter = new Router({ prefix: '/api/qiniu' })
 const getQiniuToken = require('../utils/qiniu')
 
 qiniuRouter.get('/token', async(ctx, next) => {

@@ -11,6 +11,7 @@
   "dependencies": {
     "koa": "^2.8.1",
     "koa-router": "^7.4.0",
+    "koa2-cors": "^2.0.6",
     "qiniu": "^7.2.2"
   },
   "devDependencies": {

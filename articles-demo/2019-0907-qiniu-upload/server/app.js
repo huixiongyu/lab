@@ -1,8 +1,9 @@
 const Koa = require('koa')
-const router = require('koa-router')
 const app = new Koa()
+var cors = require('koa2-cors')
 const routing = require('./routes')
 
+app.use(cors())  // 解决跨域请求问题
 // 打印请求日志
 app.use(async (ctx, next) => {
     const start = new Date()
@@ -10,7 +11,6 @@ app.use(async (ctx, next) => {
     const ms = new Date() - start
     console.log(`${ctx.method}${ctx.url}-${ms}ms`)
 })
-
 
 routing(app);
 
