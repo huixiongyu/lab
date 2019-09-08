@@ -28,13 +28,18 @@ export default {
   data() {
     return {
       qiniuToken: '',
+      keyName: 'dingxiangjie.jpg',
     };
   },
   components: {
   },
   methods: {
-    handleBeforeUpload() {
-      this.$http.get('/qiniu/token').then((res) => {
+    async handleBeforeUpload() {
+      await this.$http.get('/qiniu/token/name', {
+        params: {
+          name: 'dingxiangjie.jpg',
+        },
+      }).then((res) => {
         console.log(res.data.token);
         this.qiniuToken = res.data.token;
       })
@@ -44,6 +49,7 @@ export default {
             desc: err ? '' : '上传失败',
           });
         });
+      console.log('我等到了...');
     },
     handleSuccess(res) {
       console.log(res);
