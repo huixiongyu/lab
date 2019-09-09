@@ -9,8 +9,8 @@
         :on-success="handleSuccess"
         :format="['jpg', 'jpeg', 'png']"
         :max-size="4096"
-        :data="{token: qiniuToken, key: 'dingxiangjie.jpg'}"
-        action="http://upload-z2.qiniup.com">
+        :data="{token: qiniuToken}"
+        :action="postURL">
         <div style="padding: 20px 0">
             <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
             <p>点击或者拖拽文件到此处上传</p>
@@ -27,19 +27,15 @@ export default {
   name: 'home',
   data() {
     return {
+      postURL: 'http://upload-z2.qiniup.com',
       qiniuToken: '',
-      keyName: 'dingxiangjie.jpg',
     };
   },
   components: {
   },
   methods: {
     async handleBeforeUpload() {
-      await this.$http.get('/qiniu/token/name', {
-        params: {
-          name: 'dingxiangjie.jpg',
-        },
-      }).then((res) => {
+      await this.$http.get('/qiniu/token').then((res) => {
         console.log(res.data.token);
         this.qiniuToken = res.data.token.trim();
       })
@@ -49,7 +45,6 @@ export default {
             desc: err ? '' : '上传失败',
           });
         });
-      console.log('我等到了...');
     },
     handleSuccess(res) {
       console.log(res);

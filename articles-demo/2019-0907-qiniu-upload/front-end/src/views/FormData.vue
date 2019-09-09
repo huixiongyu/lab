@@ -1,12 +1,11 @@
 <template>
-  <div class="about">
-    about
+  <div class="form-data">
+    form
   </div>
 </template>
 <script>
 
-
 export default {
-  name: 'about',
+  name: 'form-data',
 };
 </script>
