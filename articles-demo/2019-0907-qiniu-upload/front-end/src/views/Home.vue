@@ -9,7 +9,7 @@
         :on-success="handleSuccess"
         :format="['jpg', 'jpeg', 'png']"
         :max-size="4096"
-        :data="{token: qiniuToken}"
+        :data="{token: qiniuToken, key: 'dingxiangjie.jpg'}"
         action="http://upload-z2.qiniup.com">
         <div style="padding: 20px 0">
             <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
@@ -41,7 +41,7 @@ export default {
         },
       }).then((res) => {
         console.log(res.data.token);
-        this.qiniuToken = res.data.token;
+        this.qiniuToken = res.data.token.trim();
       })
         .catch((err) => {
           this.$Notice.error({
