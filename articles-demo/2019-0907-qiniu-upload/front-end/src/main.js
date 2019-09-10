@@ -4,6 +4,7 @@ import {
   Upload,
   Button,
   Icon,
+  Notice,
 } from 'iview';
 import App from './App.vue';
 import router from './router';
@@ -15,6 +16,7 @@ const instance = axios.create({
   timeout: 3000,
 });
 Vue.prototype.$http = instance;
+Vue.prototype.$Notice = Notice;
 Vue.component('Upload', Upload);
 Vue.component('Button', Button);
 Vue.component('Icon', Icon);

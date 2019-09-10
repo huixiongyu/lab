@@ -26,5 +26,15 @@ export default new Router({
       name: 'form-data',
       component: () => import('./views/FormData.vue'),
     },
+    {
+      path: '/preview',
+      name: 'preview',
+      component: () => import('./views/Preview.vue'),
+    },
+    {
+      path: '/multiple',
+      name: 'multiple',
+      component: () => import('./views/Multiple.vue'),
+    },
   ],
 });

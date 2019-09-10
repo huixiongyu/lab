@@ -1,5 +1,5 @@
 <template>
-  <div class="with-name">
+  <div class="preview">
     <div class="directly-upload">
       <Upload
         ref="upload"
@@ -22,7 +22,7 @@
 <script>
 
 export default {
-  name: 'post-name',
+  name: 'preview',
   data() {
     return {
       postURL: 'http://upload-z2.qiniup.com',
@@ -32,25 +32,6 @@ export default {
     };
   },
   methods: {
-    // 默认用文件名作为上传的key值
-    // async handleBeforeUpload() {
-    //   await this.$http.get('/qiniu/token/name', {
-    //     params: {
-    //       name: 'dingxiangjie.jpg',
-    //     },
-    //   }).then((res) => {
-    //     console.log(res.data.token);
-    //     this.qiniuToken = res.data.token.trim();
-    //   })
-    //     .catch((err) => {
-    //       this.$Notice.error({
-    //         title: '错误',
-    //         desc: err ? '' : '上传失败',
-    //       });
-    //     });
-    //   console.log('我等到了...');
-    // },
-    // 修改文件的名字后上传，可以避免重复
     async handleBeforeUpload(file) {
       console.log(file);
       const suffixList = file.name.split('.');
@@ -85,7 +66,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-  .with-name{
+  .preview{
     width: 100vw;
     height: 900px;
     display: flex;
