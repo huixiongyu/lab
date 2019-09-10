@@ -9,6 +9,7 @@
         :on-success="handleSuccess"
         :format="['jpg', 'jpeg', 'png', 'gif']"
         :max-size="4096"
+        :data="{ token: qiniuToken, key: qiniuKey }"
         :action="postURL">
         <div style="padding: 20px 0">
             <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
@@ -20,7 +21,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
 
 export default {
   name: 'form-date',
@@ -29,15 +29,15 @@ export default {
       postURL: 'http://upload-z2.qiniup.com',
       baseURL: 'http://qiniu.hackslog.cn/',
       qiniuToken: '',
+      qiniuKey: '',
       perfix: 'blog',
-      keyList: [],
-      imageList: [],
-      resultList: [],
+      keyList: [], // 存放上传的名字
+      imageList: [], // 存放上传信息，
+      uploadFile: [],
     };
   },
   methods: {
     handleBeforeUpload(file) {
-      console.log(file);
       const suffixList = file.name.split('.');
       const baseName = suffixList[0];
       const suffix = suffixList[1];
@@ -50,10 +50,10 @@ export default {
         key: newName,
         token: '',
       };
-      console.log(postItem);
-      console.log(postItem.file);
       this.keyList.push(newName);
+      // this.keyList.push(file.name);
       this.imageList.push(postItem);
+      this.uploadFile.push(newFile);
       return false;
     },
     async handleUpload() {
@@ -70,13 +70,9 @@ export default {
         },
       }).then((res) => {
         const resultList = res.data.tokenList;
-        console.log('请求完Token之后的列表', res);
-        console.log(resultList);
         resultList.forEach((item, index) => {
-          console.log(item);
           this.imageList[index].token = item;
         });
-        console.log('拿到了Token的数据', this.imageList);
       })
         .catch(() => {
           this.$Notice.error({
@@ -84,45 +80,59 @@ export default {
             desc: '获取Token失败',
           });
         });
-      const queue = [];
-      this.imageList.forEach((item) => {
-        queue.push(this.postToQiniu(item));
-      });
-      Promise.all(queue).then((values) => {
-        this.$Notice.success({
-          title: '上传成功！',
+      console.log(this.imageList);
+      this.imageList.forEach(async (item, index) => {
+        this.qiniuToken = item.token;
+        this.qiniuKey = item.key;
+        await this.$nextTick(async () => {
+          console.log(this.qiniuToken);
+          console.log(this.uploadFile[index]);
+          await this.$refs.upload.post(this.uploadFile[index]);
         });
-        console.log(values);
-      }, (reason) => {
-        this.$Notice.error({
-          title: '上传失败！',
-        });
-        console.log(reason);
       });
+      // const queue = [];
+      // this.imageList.forEach((item) => {
+      //   queue.push(this.postToQiniu(item));
+      // });
+      // Promise.all(queue).then((values) => {
+      //   this.$Notice.success({
+      //     title: '上传成功！',
+      //   });
+      //   console.log(values);
+      // }, (reason) => {
+      //   this.$Notice.error({
+      //     title: '上传失败！',
+      //   });
+      //   console.log(reason);
+      // });
     },
-    postToQiniu(data) {
-      const formData = new FormData();
-      formData.append('file', data.file);
-      formData.append('key', data.key);
-      formData.append('token', data.token);
-      return new Promise((resolve, reject) => {
-        axios({
-          method: 'post',
-          url: this.postURL,
-          data: formData,
-        })
-          .then((res) => {
-            const fileLink = `${this.baseURL}${res.key}`;
-            resolve(fileLink);
-          })
-          .catch(() => {
-            const fileLink = `${this.baseURL}${data.key}`;
-            reject(fileLink);
-          });
-      });
-    },
+    // 这个方法用FormData() + Post的方式来上传，但是一直是403报错，遂放弃调用了组件里的方法
+    // postToQiniu(data) {
+    //   const formData = new FormData();
+    //   formData.append('file', data.file);
+    //   formData.append('key', data.key);
+    //   formData.append('token', data.token);
+    //   return new Promise((resolve, reject) => {
+    //     axios({
+    //       method: 'post',
+    //       url: this.postURL,
+    //       data: formData,
+    //     })
+    //       .then((res) => {
+    //         const fileLink = `${this.baseURL}${res.key}`;
+    //         resolve(fileLink);
+    //       })
+    //       .catch(() => {
+    //         const fileLink = `${this.baseURL}${data.key}`;
+    //         reject(fileLink);
+    //       });
+    //   });
+    // },
     handleSuccess(res) {
       console.log(res);
+      this.$Notice.success({
+        title: `文件${this.baseURL}${res.key}已经可以访问！`,
+      });
     },
   },
 };

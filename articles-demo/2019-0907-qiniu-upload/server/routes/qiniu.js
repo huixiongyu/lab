@@ -26,8 +26,25 @@ qiniuRouter.get('/token/list', async(ctx, next) => {
     keyList.forEach((item) => {
         tokenList.push(getQiniuTokenWithName(item))
     })
+    console.log(keyList)
+    console.log(tokenList)    
     ctx.body = {
         tokenList
+    }
+})
+
+qiniuRouter.get('/token/inlist', async(ctx, next) => {
+    const decodeString = decodeURIComponent(ctx.query.list)
+    const keyList = decodeString.split(',');
+    const tokenList = []
+    keyList.forEach((item) => {
+        tokenList.push(getQiniuToken())
+    })
+    console.log(keyList)
+    console.log(tokenList)
+    ctx.body = {
+        tokenList,
+        keyList
     }
 })
 
