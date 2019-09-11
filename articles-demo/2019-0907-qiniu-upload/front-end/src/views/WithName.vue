@@ -7,7 +7,7 @@
         type="drag"
         :before-upload="handleBeforeUpload"
         :on-success="handleSuccess"
-        :format="['jpg', 'jpeg', 'png']"
+        :format="['jpg', 'jpeg', 'png', 'gif']"
         :max-size="4096"
         :data="{token: qiniuToken, key: keyName}"
         :action="postURL">

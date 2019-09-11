@@ -1,5 +1,5 @@
 <template>
-  <div class="form-data">
+  <div class="manual ">
     <div class="directly-upload">
       <Upload
         ref="upload"
@@ -23,7 +23,7 @@
 <script>
 
 export default {
-  name: 'form-data',
+  name: 'manual',
   data() {
     return {
       postURL: 'http://upload-z2.qiniup.com',
@@ -51,7 +51,6 @@ export default {
         token: '',
       };
       this.keyList.push(newName);
-      // this.keyList.push(file.name);
       this.imageList.push(postItem);
       this.uploadFile.push(newFile);
       return false;
@@ -86,44 +85,7 @@ export default {
           this.$refs.upload.post(this.uploadFile[index]);
         });
       });
-      // const queue = [];
-      // this.imageList.forEach((item) => {
-      //   queue.push(this.postToQiniu(item));
-      // });
-      // Promise.all(queue).then((values) => {
-      //   this.$Notice.success({
-      //     title: '上传成功！',
-      //   });
-      //   console.log(values);
-      // }, (reason) => {
-      //   this.$Notice.error({
-      //     title: '上传失败！',
-      //   });
-      //   console.log(reason);
-      // });
     },
-    // 这个方法用FormData() + Post的方式来上传，但是一直是403报错，遂放弃调用了组件里的方法
-    // postToQiniu(data) {
-    //   const formData = new FormData();
-    //   formData.append('file', data.file);
-    //   formData.append('key', data.key);
-    //   formData.append('token', data.token);
-    //   return new Promise((resolve, reject) => {
-    //     axios({
-    //       method: 'post',
-    //       url: this.postURL,
-    //       data: formData,
-    //     })
-    //       .then((res) => {
-    //         const fileLink = `${this.baseURL}${res.key}`;
-    //         resolve(fileLink);
-    //       })
-    //       .catch(() => {
-    //         const fileLink = `${this.baseURL}${data.key}`;
-    //         reject(fileLink);
-    //       });
-    //   });
-    // },
     handleSuccess(res) {
       console.log(res);
       this.$Notice.success({
@@ -134,7 +96,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-  .form-data{
+  .manual {
     width: 100vw;
     height: 900px;
     display: flex;

@@ -40,11 +40,8 @@ qiniuRouter.get('/token/inlist', async(ctx, next) => {
     keyList.forEach((item) => {
         tokenList.push(getQiniuToken())
     })
-    console.log(keyList)
-    console.log(tokenList)
     ctx.body = {
-        tokenList,
-        keyList
+        tokenList
     }
 })
 

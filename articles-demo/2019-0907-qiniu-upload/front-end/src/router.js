@@ -32,6 +32,11 @@ export default new Router({
       component: () => import('./views/Preview.vue'),
     },
     {
+      path: '/manual',
+      name: 'manual',
+      component: () => import('./views/Manual.vue'),
+    },
+    {
       path: '/multiple',
       name: 'multiple',
       component: () => import('./views/Multiple.vue'),
