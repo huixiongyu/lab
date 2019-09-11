@@ -6,7 +6,11 @@ npm install
 npm run serve
 ```
 
+运行的时候记得修改baseURL和postURL
 
+baseURL是你绑定的域名地址，一般二级域名，备案、https、更改CNAME等操作请自行谷歌。
+
+postURL对应着后端配置中bucket的[存储区域](https://developer.qiniu.com/kodo/manual/1671/region-endpoint)
 
 ## server
 
@@ -14,7 +18,7 @@ server使用Koa编写，但是如果你不具备良好的编程能力不建议�
 
 示例只是实现基本的上传能力，开发建议使用eslint规范自己的代码，还有充分运用模块化、面向对象的方式编程。
 
-克隆以后请在config下面设置自己的七牛密钥
+克隆以后请在config下面设置自己的七牛密钥、bucket.
 
 运行：
 
