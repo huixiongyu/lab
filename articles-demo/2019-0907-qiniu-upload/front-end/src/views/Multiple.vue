@@ -14,6 +14,7 @@
 </template>
 <script>
 import axios from 'axios';
+import qs from 'qs';
 
 export default {
   name: 'multiple',
@@ -60,15 +61,18 @@ export default {
         });
         return;
       }
-      const list = encodeURIComponent(JSON.stringify(this.keyList));
+      // const list = encodeURIComponent(JSON.stringify(this.keyList));
       await this.$http.get('/qiniu/token/list', {
         params: {
-          list,
+          list: this.keyList,
+        },
+        paramsSerializer(params) {
+          return qs.stringify(params, { arrayFormat: 'repeat' });
         },
       }).then((res) => {
         const resultList = res.data.tokenList;
         resultList.forEach((item, index) => {
-          console.log(item, res.data.keyList[index]);
+          console.log(res.data.keyList[index]);
           this.imageList[index].token = item;
         });
       })
@@ -82,50 +86,33 @@ export default {
       this.imageList.forEach((item) => {
         queue.push(this.postToQiniu(item));
       });
-      Promise.all(queue).then((values) => {
-        this.$refs.upload.value = null;
-        this.$Notice.success({
-          title: '上传成功！',
-        });
-        console.log(values);
-      }, (reason) => {
-        this.$Notice.error({
-          title: '上传失败！',
-        });
-        console.log(reason);
-      });
+      this.$refs.upload.value = null;
     },
     postToQiniu(data) {
+      const that = this;
       const formData = new FormData();
       formData.append('file', data.file);
       formData.append('key', data.key);
       formData.append('token', data.token);
-      console.log(formData.get('file'));
-      return new Promise((resolve, reject) => {
-        console.log(this.postURL);
-        const $axios = axios.create({ withCredentials: false });
-        $axios({
-          method: 'POST',
-          url: this.postURL,
-          data: formData,
-        })
-          .then((res) => {
-            const fileLink = `${this.baseURL}${res.key}`;
-            console.log(res);
-            resolve(fileLink);
-          })
-          .catch((err) => {
-            const fileLink = `${this.baseURL}${data.key}`;
-            console.log(err);
-            reject(fileLink);
+      axios({
+        method: 'POST',
+        url: this.postURL,
+        data: formData,
+      })
+        .then((res) => {
+          const fileLink = `${that.baseURL}${res.data.key}`;
+          this.$Notice.success({
+            title: '上传成功！',
+            desc: fileLink,
           });
-      });
-    },
-    handleSuccess(res) {
-      console.log(res);
-      this.$Notice.success({
-        title: `文件${this.baseURL}${res.key}已经可以访问！`,
-      });
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$Notice.error({
+            title: '上传失败！',
+            desc: data.key,
+          });
+        });
     },
   },
 };
