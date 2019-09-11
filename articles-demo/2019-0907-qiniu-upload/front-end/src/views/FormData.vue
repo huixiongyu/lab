@@ -22,7 +22,7 @@
 <script>
 
 export default {
-  name: 'form-date',
+  name: 'form-data',
   data() {
     return {
       postURL: 'http://upload-z2.qiniup.com',

@@ -1,42 +1,41 @@
 <template>
-  <div class="form-data">
+  <div class="multiple">
     <div class="directly-upload">
-      <Upload
+      <input
         ref="upload"
-        multiple
-        type="drag"
-        :before-upload="handleBeforeUpload"
-        :on-success="handleSuccess"
-        :format="['jpg', 'jpeg', 'png', 'gif']"
-        :max-size="4096"
-        :data="{ token: qiniuToken}"
-        :action="postURL">
-        <div style="padding: 20px 0">
-            <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-            <p>点击或者拖拽文件到此处上传</p>
-        </div>
-      </Upload>
+        @change="handleChange"
+        type="file"
+        name="file"
+        accept="image/*"
+        multiple>
       <Button type="success" style="float: right;" @click="handleUpload">确定上传</Button>
     </div>
   </div>
 </template>
 <script>
+import axios from 'axios';
 
 export default {
-  name: 'form-data',
+  name: 'multiple',
   data() {
     return {
       postURL: 'http://upload-z2.qiniup.com',
       baseURL: 'http://qiniu.hackslog.cn/',
-      qiniuToken: '',
-      qiniuKey: '',
       perfix: 'blog',
       keyList: [], // 存放上传的名字
-      imageList: [], // 存放上传信息，
-      uploadFile: [],
+      imageList: [], // 存放上传信息
     };
   },
   methods: {
+    handleChange(e) {
+      const { files } = e.target;
+      if (!files) {
+        return;
+      }
+      Array.from(files).forEach((file) => {
+        this.handleBeforeUpload(file);
+      });
+    },
     handleBeforeUpload(file) {
       const suffixList = file.name.split('.');
       const baseName = suffixList[0];
@@ -51,9 +50,7 @@ export default {
         token: '',
       };
       this.keyList.push(newName);
-      // this.keyList.push(file.name);
       this.imageList.push(postItem);
-      this.uploadFile.push(newFile);
       return false;
     },
     async handleUpload() {
@@ -64,13 +61,14 @@ export default {
         return;
       }
       const list = encodeURIComponent(JSON.stringify(this.keyList));
-      await this.$http.get('/qiniu/token/inlist', {
+      await this.$http.get('/qiniu/token/list', {
         params: {
           list,
         },
       }).then((res) => {
         const resultList = res.data.tokenList;
         resultList.forEach((item, index) => {
+          console.log(item, res.data.keyList[index]);
           this.imageList[index].token = item;
         });
       })
@@ -80,50 +78,49 @@ export default {
             desc: '获取Token失败',
           });
         });
-      this.imageList.forEach((item, index) => {
-        this.qiniuToken = item.token;
-        this.$nextTick(() => {
-          this.$refs.upload.post(this.uploadFile[index]);
-        });
+      const queue = [];
+      this.imageList.forEach((item) => {
+        queue.push(this.postToQiniu(item));
       });
-      // const queue = [];
-      // this.imageList.forEach((item) => {
-      //   queue.push(this.postToQiniu(item));
-      // });
-      // Promise.all(queue).then((values) => {
-      //   this.$Notice.success({
-      //     title: '上传成功！',
-      //   });
-      //   console.log(values);
-      // }, (reason) => {
-      //   this.$Notice.error({
-      //     title: '上传失败！',
-      //   });
-      //   console.log(reason);
-      // });
+      Promise.all(queue).then((values) => {
+        this.$refs.upload.value = null;
+        this.$Notice.success({
+          title: '上传成功！',
+        });
+        console.log(values);
+      }, (reason) => {
+        this.$Notice.error({
+          title: '上传失败！',
+        });
+        console.log(reason);
+      });
     },
-    // 这个方法用FormData() + Post的方式来上传，但是一直是403报错，遂放弃调用了组件里的方法
-    // postToQiniu(data) {
-    //   const formData = new FormData();
-    //   formData.append('file', data.file);
-    //   formData.append('key', data.key);
-    //   formData.append('token', data.token);
-    //   return new Promise((resolve, reject) => {
-    //     axios({
-    //       method: 'post',
-    //       url: this.postURL,
-    //       data: formData,
-    //     })
-    //       .then((res) => {
-    //         const fileLink = `${this.baseURL}${res.key}`;
-    //         resolve(fileLink);
-    //       })
-    //       .catch(() => {
-    //         const fileLink = `${this.baseURL}${data.key}`;
-    //         reject(fileLink);
-    //       });
-    //   });
-    // },
+    postToQiniu(data) {
+      const formData = new FormData();
+      formData.append('file', data.file);
+      formData.append('key', data.key);
+      formData.append('token', data.token);
+      console.log(formData.get('file'));
+      return new Promise((resolve, reject) => {
+        console.log(this.postURL);
+        const $axios = axios.create({ withCredentials: false });
+        $axios({
+          method: 'POST',
+          url: this.postURL,
+          data: formData,
+        })
+          .then((res) => {
+            const fileLink = `${this.baseURL}${res.key}`;
+            console.log(res);
+            resolve(fileLink);
+          })
+          .catch((err) => {
+            const fileLink = `${this.baseURL}${data.key}`;
+            console.log(err);
+            reject(fileLink);
+          });
+      });
+    },
     handleSuccess(res) {
       console.log(res);
       this.$Notice.success({
@@ -134,7 +131,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-  .form-data{
+  .multiple{
     width: 100vw;
     height: 900px;
     display: flex;
