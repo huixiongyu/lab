@@ -5,6 +5,7 @@ import {
   Button,
   Icon,
   Notice,
+  Modal,
 } from 'iview';
 import App from './App.vue';
 import router from './router';
@@ -20,6 +21,7 @@ Vue.prototype.$Notice = Notice;
 Vue.component('Upload', Upload);
 Vue.component('Button', Button);
 Vue.component('Icon', Icon);
+Vue.component('Modal', Modal);
 Vue.config.productionTip = false;
 
 new Vue({

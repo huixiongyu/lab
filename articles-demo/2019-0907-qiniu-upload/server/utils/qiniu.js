@@ -25,4 +25,9 @@ function getQiniuTokenWithName(nameReWrite) {
     return uploadToken 
 }
 
-module.exports = { getQiniuToken, getQiniuTokenWithName}
+function formUploadPut(token, file) {
+    console.log(token);
+    console.log(file);
+}
+
+module.exports = { getQiniuToken, getQiniuTokenWithName, formUploadPut}

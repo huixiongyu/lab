@@ -4,7 +4,8 @@
       <router-link to="/">前端直传</router-link> |
       <router-link to="/postname">自定义文件名</router-link> |
       <router-link to="/manual">手动上传</router-link> |
-      <router-link to="/multiple">自定义多张图片文件名 + 预览</router-link>
+      <router-link to="/multiple">自定义多张图片文件名</router-link> |
+      <router-link to="/server">预览 + 上传到服务器</router-link>
     </div>
     <router-view/>
   </div>

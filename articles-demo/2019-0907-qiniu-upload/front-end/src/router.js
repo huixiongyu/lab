@@ -38,5 +38,10 @@ export default new Router({
       name: 'multiple',
       component: () => import('./views/Multiple.vue'),
     },
+    {
+      path: '/server',
+      name: 'server',
+      component: () => import('./views/ServerUpload.vue'),
+    },
   ],
 });
