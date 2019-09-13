@@ -50,6 +50,7 @@ export default {
   },
   methods: {
     handleBeforeUpload(file) {
+      console.log(file);
       const check = this.uploadList.length < 5;
       if (!check) {
         this.$Notice.warning({
@@ -69,12 +70,13 @@ export default {
         });
         return false;
       }
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        this.imageList.push(reader.result);
-      };
       this.uploadList.push(file);
+      this.imageList.push(window.URL.createObjectURL(file));
+      // const reader = new FileReader();
+      // reader.readAsDataURL(file);
+      // reader.onloadend = () => {
+      //   this.imageList.push(reader.result);
+      // };
       return false;
     },
     handleMaxSize(file) {

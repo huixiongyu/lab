@@ -25,9 +25,27 @@ function getQiniuTokenWithName(nameReWrite) {
     return uploadToken 
 }
 
-function formUploadPut(token, file) {
-    console.log(token);
-    console.log(file);
+// 服务器端上传到七牛
+function formUploadPut(fileName, file) {
+    const uploadToken = getQiniuTokenWithName(fileName)
+    const config = new qiniu.conf.Config()
+    config.zone = qiniu.zone.Zone_z2  // 根据你的上传空间选择zone对象
+    const formUploader = new qiniu.form_up.FormUploader(config)
+    const putExtra = new qiniu.form_up.PutExtra()
+    return new Promise((resolve, reject) => {
+        formUploader.putFile(uploadToken, fileName, file, putExtra, (respErr,
+            respBody, respInfo) => {
+            if (respErr) {
+              reject(respErr)
+            }
+            if (respInfo.statusCode == 200) {
+              resolve(respBody)
+            } else {
+              console.log(respInfo.statusCode);
+              resolve(respBody)
+            }
+          })
+    })   
 }
 
 module.exports = { getQiniuToken, getQiniuTokenWithName, formUploadPut}
