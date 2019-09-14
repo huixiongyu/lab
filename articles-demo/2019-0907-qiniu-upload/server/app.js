@@ -28,7 +28,7 @@ app.use(koaBody({
         const ext = path.extname(originalFileName)  // node自带的可以获取文件后缀名的方法，它是带.的
         const timeStamp = new Date().getTime()
         const randomNum = Math.floor(Math.random()*10000 + 1) 
-        const fileName = `${timeStamp}${randomNum}${ext}` // 文件名是时间戳+10000以内的随机数，不就不信会重名
+        const fileName = `${timeStamp}${randomNum}${ext}` // 文件名是时间戳+10000以内的随机数，我就不信会重名
         const dir = path.join(__dirname, `/public/uploads/${yearMonthDay()}`) // 按期日创建文件夹
         if(!fs.existsSync(dir)){
           fs.mkdirSync(dir) 

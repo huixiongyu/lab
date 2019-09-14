@@ -1,0 +1,13 @@
+/* miniprogram/pages/display/index.wxss */
+.image-container{
+  width: 750rpx;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.post-image{
+  width: 740rpx;
+  height: 400rpx;
+  margin-bottom: 10rpx;
+}

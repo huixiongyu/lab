@@ -40,9 +40,10 @@ export default {
         this.qiniuToken = res.data.token.trim();
       })
         .catch((err) => {
+          console.log(err);
           this.$Notice.error({
             title: '错误',
-            desc: err ? '' : '上传失败',
+            desc: '上传失败',
           });
         });
     },
