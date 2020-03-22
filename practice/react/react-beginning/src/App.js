@@ -11,7 +11,29 @@ class App extends Component{
     }
   }
 
+  componentWillMount() {
+    console.log('还没挂载呢');
+  }
+
+  componentDidMount() {
+    console.log('挂载完成了');
+  }
+
+  shouldComponentUpdate() {
+    console.log('更新之前');
+    return true;
+  }
+
+  componentWillUpdate() {
+    console.log('可以更新了')
+  }
+
+  componentDidUpdate() {
+    console.log('我已经更完了');
+  }
+
   render() {
+    console.log('挂载中.....')
     return (
       <div>
         <div>Hello word</div>
