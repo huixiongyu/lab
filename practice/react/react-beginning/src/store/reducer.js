@@ -9,7 +9,6 @@ const defaultState = {
   ],
 };
 export default (state = defaultState, action) => {
-  console.log(state, action)
   if (action.type === 'change_input_value') {
     const newState = JSON.parse(JSON.stringify(state));
     newState.inputValue = action.value;
@@ -19,6 +18,11 @@ export default (state = defaultState, action) => {
     const newState = JSON.parse(JSON.stringify(state));
     newState.list.push(newState.inputValue);
     newState.inputValue = '';
+    return newState;
+  }
+  if (action.type === 'deleteItem') {
+    const newState = JSON.parse(JSON.stringify(state));
+    newState.list.splice(action.index, 1);
     return newState;
   }
   return state;  
