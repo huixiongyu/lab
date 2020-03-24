@@ -8,14 +8,22 @@ class TodoList extends Component {
   constructor(props) {
     super(props);
     this.state = store.getState();
+    this.changeInputValue= this.changeInputValue.bind(this)
+    this.clickBtn = this.clickBtn.bind(this);
+    this.storeChange = this.storeChange.bind(this);
+    store.subscribe(this.storeChange);
   }
   state = {  }
   render() { 
     return ( 
       <div style={{margin:'10px'}}>
         <div>
-            <Input placeholder={this.state.inputValue} style={{ width:'250px', marginRight:'10px'}}/>
-            <Button type="primary">增加</Button>
+            <Input
+              value={this.state.inputValue}
+              onChange={this.changeInputValue}
+              placeholder={this.state.inputValue}
+              style={{ width:'250px', marginRight:'10px'}}/>
+            <Button onClick={this.clickBtn} type="primary">增加</Button>
         </div>
         <div style={{margin:'10px',width:'300px'}}>
           <List
@@ -30,6 +38,25 @@ class TodoList extends Component {
         </div>
       </div>
      );
+  }
+
+  changeInputValue(e) {
+    const action = {
+      type: 'change_input_value',
+      value: e.target.value,
+    }
+    store.dispatch(action)
+  }
+
+  clickBtn() {
+    const action = {
+      type: 'add_item',
+    }
+    store.dispatch(action);
+  }
+
+  storeChange(){
+    this.setState(store.getState())
   }
 
   componentDidMount() {
