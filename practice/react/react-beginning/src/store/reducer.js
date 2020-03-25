@@ -1,5 +1,6 @@
+import { CHANGE_INPUT, ADD_ITEM, DELETE_ITEM, GET_LIST} from './actionTypes';
 const defaultState = {
-  inputValue: '做点什么吧',
+  inputValue: '',
   list: [
     'Racing car sprays burning fuel into crowd.',
     'Japanese princess to wed commoner.',
@@ -9,21 +10,26 @@ const defaultState = {
   ],
 };
 export default (state = defaultState, action) => {
-  if (action.type === 'change_input_value') {
+  if (action.type === CHANGE_INPUT) {
     const newState = JSON.parse(JSON.stringify(state));
     newState.inputValue = action.value;
     return newState
   }
-  if (action.type === 'add_item') {
+  if (action.type === ADD_ITEM) {
     const newState = JSON.parse(JSON.stringify(state));
     newState.list.push(newState.inputValue);
     newState.inputValue = '';
     return newState;
   }
-  if (action.type === 'deleteItem') {
+  if (action.type === DELETE_ITEM) {
     const newState = JSON.parse(JSON.stringify(state));
     newState.list.splice(action.index, 1);
     return newState;
   }
-  return state;  
+  if (action.type === GET_LIST) {
+    const newState = JSON.parse(JSON.stringify(state));
+    newState.list = action.list;
+    return newState;
+  }
+  return state;
 }
