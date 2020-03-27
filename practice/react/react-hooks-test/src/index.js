@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 // import App from './App';
-import Example6 from './Example6';
+import Example9 from './Example9';
 
 ReactDOM.render(
-  <Example6 />,
+  <Example9 />,
   document.getElementById('root')
 );
