@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { CSSTransition } from 'react-transition-group'
+import { actionCreators } from './store'
 import {
   HeaderWrapper,
   Logo,
@@ -8,9 +9,37 @@ import {
   NavItem,
   SearchWrapper,
   NavSearch,
+  SearchInfo,
+  SearchInfoTitle,
+  SearchInfoSwtich,
+  SearchInfoItem,
   Addition,
   Button
 } from './style'
+
+const getSearhList = (show) => {
+  if (show) {
+    return (
+      <SearchInfo>
+        <SearchInfoTitle>热门搜索
+        <SearchInfoSwtich>换一批</SearchInfoSwtich>
+        </SearchInfoTitle>
+        <div>
+          <SearchInfoItem>教育</SearchInfoItem>
+          <SearchInfoItem>教育</SearchInfoItem>
+          <SearchInfoItem>教育</SearchInfoItem>
+          <SearchInfoItem>教育</SearchInfoItem>
+          <SearchInfoItem>教育</SearchInfoItem>
+          <SearchInfoItem>教育</SearchInfoItem>
+          <SearchInfoItem>教育</SearchInfoItem>
+          <SearchInfoItem>教育</SearchInfoItem>
+        </div>
+      </SearchInfo>
+    )
+  } else {
+    return null;
+  }
+}
 
 class Header extends Component {
   render() {
@@ -35,6 +64,9 @@ class Header extends Component {
                 ></NavSearch>
             </CSSTransition>
             <i className={this.props.focused ? 'focused iconfont' : 'iconfont'}>&#xe64d;</i>
+            {
+              getSearhList(this.props.focused)
+            }
           </SearchWrapper>
           <NavItem className="right">登录</NavItem>
           <NavItem className="right">
@@ -55,23 +87,17 @@ class Header extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    focused: state.header.focused
+    focused: state.getIn(['header', 'focused']),
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     handleInputFocus() {
-      const action = {
-        type: 'search_focus'
-      }
-      dispatch(action);
+      dispatch(actionCreators.searchFocus());
     },
     handleInputBlur() {
-      const action = {
-        type: 'search_blur'
-      }
-      dispatch(action);
+      dispatch(actionCreators.searchBlur());
     }
   }
 } 
