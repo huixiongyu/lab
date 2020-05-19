@@ -17,32 +17,30 @@ import {
   Button
 } from './style'
 
-const getSearhList = (show) => {
-  if (show) {
-    return (
-      <SearchInfo>
-        <SearchInfoTitle>热门搜索
-        <SearchInfoSwtich>换一批</SearchInfoSwtich>
-        </SearchInfoTitle>
-        <div>
-          <SearchInfoItem>教育</SearchInfoItem>
-          <SearchInfoItem>教育</SearchInfoItem>
-          <SearchInfoItem>教育</SearchInfoItem>
-          <SearchInfoItem>教育</SearchInfoItem>
-          <SearchInfoItem>教育</SearchInfoItem>
-          <SearchInfoItem>教育</SearchInfoItem>
-          <SearchInfoItem>教育</SearchInfoItem>
-          <SearchInfoItem>教育</SearchInfoItem>
-        </div>
-      </SearchInfo>
-    )
-  } else {
-    return null;
-  }
-}
 
 class Header extends Component {
+  getSearhList = () => {
+    const { focused, list } = this.props;
+    if (focused) {
+      return (
+        <SearchInfo>
+          <SearchInfoTitle>热门搜索
+          <SearchInfoSwtich>换一批</SearchInfoSwtich>
+          </SearchInfoTitle>
+          {
+            list.map((item) => {
+              return <SearchInfoItem key={item}>{item}</SearchInfoItem>
+            })
+          }
+        </SearchInfo>
+      )
+    } else {
+      return null;
+    }
+  }
+
   render() {
+    const { focused, handleInputFocus, handleInputBlur } = this.props;
     return (
       <HeaderWrapper>
         <Logo href='/' />
@@ -53,19 +51,19 @@ class Header extends Component {
           <NavItem className="left">下载App</NavItem>
           <SearchWrapper>
             <CSSTransition
-              in={this.props.focused}
+              in={focused}
               timeout={200}
               classNames="slide"
             >
               <NavSearch
-                className={this.props.focused ? 'focused' : ''}
-                onFocus={this.props.handleInputFocus}
-                onBlur={this.props.handleInputBlur}
+                className={focused ? 'focused' : ''}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
                 ></NavSearch>
             </CSSTransition>
-            <i className={this.props.focused ? 'focused iconfont' : 'iconfont'}>&#xe64d;</i>
+            <i className={focused ? 'focused iconfont' : 'iconfont'}>&#xe64d;</i>
             {
-              getSearhList(this.props.focused)
+              this.getSearhList()
             }
           </SearchWrapper>
           <NavItem className="right">登录</NavItem>
@@ -88,12 +86,14 @@ class Header extends Component {
 const mapStateToProps = (state) => {
   return {
     focused: state.getIn(['header', 'focused']),
+    list: state.getIn(['header', 'list'])
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     handleInputFocus() {
+      dispatch(actionCreators.getList());
       dispatch(actionCreators.searchFocus());
     },
     handleInputBlur() {
