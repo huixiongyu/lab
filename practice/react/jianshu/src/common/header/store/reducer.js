@@ -1,8 +1,11 @@
-import { SEARCH_FOCUS, SEARCH_BLUR, CHANGE_LIST } from './actionTypes';
+import { SEARCH_FOCUS, SEARCH_BLUR, CHANGE_LIST, MOUSE_ENTER, MOUSE_LEAVE, CHANGE_PAGE} from './actionTypes';
 import { fromJS } from 'immutable';
 const defaultState = fromJS({
   focused: false,
-  list: []
+  mouseIn: false,
+  list: [],
+  page: 1,
+  totalPage: 1
 });
 
 export default (state = defaultState, action) => {
@@ -12,7 +15,16 @@ export default (state = defaultState, action) => {
     case SEARCH_BLUR:
       return state.set('focused', false);
     case CHANGE_LIST:
-      return state.set('list', action.data);
+      return state.merge({
+        'list': action.data,
+        totalPage: action.totalPage,
+      });
+    case MOUSE_ENTER:
+      return state.set('mouseIn', true);
+    case MOUSE_LEAVE:
+      return state.set('mouseIn', false);
+    case CHANGE_PAGE:
+      return state.set('page', action.page);
     default:
       return state;
   }
